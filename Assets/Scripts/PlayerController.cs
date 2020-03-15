@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-
     public Animator animatorController;
     public PlayerState playerState;
 
@@ -53,34 +52,36 @@ public class PlayerController : MonoBehaviour
 
     void HandlePlayerAnimation()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) && playerState != PlayerState.RUN)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.WALK,1);
             playerState = PlayerState.WALK;
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.D) && playerState != PlayerState.WALK)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.RUN,1);
             playerState = PlayerState.RUN;
         }
         
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && playerState != PlayerState.RUN)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.WALK,-1);
             playerState = PlayerState.WALK;
         }  
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.A) && playerState != PlayerState.WALK)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.RUN,-1);
             playerState = PlayerState.RUN;
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow) ||
-            Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        if (Input.GetKeyUp(KeyCode.RightArrow) && playerState != PlayerState.RUN || 
+            Input.GetKeyUp(KeyCode.LeftArrow) && playerState != PlayerState.RUN ||
+            Input.GetKeyUp(KeyCode.A) && playerState != PlayerState.WALK || 
+            Input.GetKeyUp(KeyCode.D) && playerState != PlayerState.WALK)
         {
             ClearBasicAnimations();
             animatorController.SetBool(AnimationName.IDLE, true);

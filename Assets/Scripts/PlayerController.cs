@@ -188,7 +188,7 @@ public class PlayerController : MonoBehaviour
     {
         if(collision.CompareTag("Enemy"))
         {
-            LevelOverController.Instance.GoToThisLevel(1);
+            LevelOverController.Instance.GoToThisLevel(2);
         }
         else if(collision.CompareTag("Finish"))
         {

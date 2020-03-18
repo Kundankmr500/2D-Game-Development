@@ -186,18 +186,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.CompareTag("Enemy"))
-        {
-            LevelOverController.Instance.GoToThisLevel(2);
-        }
-        else if(collision.CompareTag("Finish"))
-        {
-            LevelOverController.Instance.GoToThisLevel(0);
-        }
-        else if (collision.CompareTag("Coin"))
-        {
-            LevelHandler.Instance.ProcessCoin(collision.gameObject);
-        }
+        LevelHandler.Instance.CheckCollidedObject(collision);
     }
 
 }

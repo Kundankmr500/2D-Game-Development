@@ -8,6 +8,7 @@ public class LevelHandler : MonoBehaviour
 
     public static LevelHandler Instance;
     public TextMeshProUGUI ScoreText;
+    public List<GameObject> PlayerLifes;
 
     private int scoreValue;
 
@@ -46,6 +47,42 @@ public class LevelHandler : MonoBehaviour
     {
         coin.SetActive(false);
         ShowScore(10);
+    }
+
+    public void ProcessPlayerLife()
+    {
+        if(PlayerLifes.Count > 1)
+        {
+            int lifeIndex = PlayerLifes.Count - 1;
+            PlayerLifes[lifeIndex].gameObject.SetActive(false);
+            PlayerLifes.RemoveAt(lifeIndex);
+        }
+        else
+        {
+            LevelOverController.Instance.GoToThisLevel(2);
+        }
+
+    }
+
+
+    public void CheckCollidedObject(Collider2D collision)
+    {
+        if (collision.CompareTag("Enemy"))
+        {
+            ProcessPlayerLife();
+        }
+        else if (collision.CompareTag("Finish"))
+        {
+            LevelOverController.Instance.GoToThisLevel(0);
+        }
+        else if (collision.CompareTag("Coin"))
+        {
+            ProcessCoin(collision.gameObject);
+        }
+        else if (collision.CompareTag("Destroyer"))
+        {
+            LevelOverController.Instance.GoToThisLevel(2);
+        }
     }
 
 

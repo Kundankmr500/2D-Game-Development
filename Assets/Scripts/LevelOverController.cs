@@ -15,12 +15,6 @@ public class LevelOverController : MonoBehaviour
     }
 
 
-    public void LevelFinish()
-    {
-       
-    }
-
-
     public void GoToThisLevel(int sceneIndex)
     {
         SceneManager.LoadScene(sceneIndex);
@@ -30,4 +24,6 @@ public class LevelOverController : MonoBehaviour
     {
         Application.Quit();
     }
+
+
 }

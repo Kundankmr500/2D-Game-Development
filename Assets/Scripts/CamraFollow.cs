@@ -14,8 +14,8 @@ public class CamraFollow : MonoBehaviour
         if (Target != null)
         {
             Vector3 newPosition = Target.position;
-            newPosition.z = -10;
-            transform.position = Vector3.Slerp(transform.position, newPosition, smoothSpeed * Time.deltaTime);
+            //newPosition.z = -10;
+            transform.position = Vector3.Slerp(transform.position, newPosition + offset, smoothSpeed * Time.deltaTime);
         }
         
     }

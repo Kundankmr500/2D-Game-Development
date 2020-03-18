@@ -2,18 +2,27 @@
 using System.Collections;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
-    public Animator animatorController;
     public PlayerState playerState;
+    public float WalkSpeed;
+    public float RunSpeed;
 
+    private Animator animatorController;
+    [SerializeField]
+    private Rigidbody2D playerBody;
     private Vector3 playerScale;
+    private int direction;
     private bool canJump = true;
     private bool canAtack = true;
+    private bool canMove;
     
     void Awake()
     {
         animatorController = GetComponent<Animator>();
+        playerBody = GetComponent<Rigidbody2D>();
         playerScale = transform.localScale;
         InitPlayerState(PlayerState.IDLE);
     }
@@ -47,6 +56,32 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandlePlayerAnimation();
+        if(canMove)
+            MoveCharactor();
+    }
+
+
+    void MoveCharactor()
+    {
+        Vector3 position = transform.position;
+        switch (playerState)
+        {
+            case PlayerState.WALK:
+                position.x += direction * WalkSpeed * Time.deltaTime;
+                break;
+            case PlayerState.RUN:
+                position.x += direction * RunSpeed * Time.deltaTime;
+                break;
+        }
+        transform.position = position;
+    }
+
+
+    void ChangePlayerState(PlayerState newState, bool _canMove, int dir = 0)
+    {
+        playerState = newState;
+        direction = dir;
+        canMove = _canMove;
     }
 
 
@@ -56,26 +91,26 @@ public class PlayerController : MonoBehaviour
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.WALK,1);
-            playerState = PlayerState.WALK;
+            ChangePlayerState(PlayerState.WALK,true,1);
         }
         else if (Input.GetKeyDown(KeyCode.D) && playerState != PlayerState.WALK)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.RUN,1);
-            playerState = PlayerState.RUN;
+            ChangePlayerState(PlayerState.RUN,true,1);
         }
         
         if (Input.GetKeyDown(KeyCode.LeftArrow) && playerState != PlayerState.RUN)
         {
             ClearBasicAnimations();
             SetPlayerProperties(AnimationName.WALK,-1);
-            playerState = PlayerState.WALK;
+            ChangePlayerState(PlayerState.WALK,true,-1);
         }  
         else if (Input.GetKeyDown(KeyCode.A) && playerState != PlayerState.WALK)
         {
-            ClearBasicAnimations();
+            ClearBasicAnimations(); 
             SetPlayerProperties(AnimationName.RUN,-1);
-            playerState = PlayerState.RUN;
+            ChangePlayerState(PlayerState.RUN,true,-1);
         }
 
         if (Input.GetKeyUp(KeyCode.RightArrow) && playerState != PlayerState.RUN || 
@@ -85,7 +120,7 @@ public class PlayerController : MonoBehaviour
         {
             ClearBasicAnimations();
             animatorController.SetBool(AnimationName.IDLE, true);
-            playerState = PlayerState.IDLE;
+            ChangePlayerState(PlayerState.IDLE,false);
         }
         
         if (Input.GetKeyDown(KeyCode.Space) && canJump)
@@ -105,20 +140,25 @@ public class PlayerController : MonoBehaviour
     IEnumerator Jump()
     {
         canJump = false;
+        PlayerState previousState = playerState;
+        ChangePlayerState(PlayerState.JUMP, canMove, direction);
         animatorController.SetBool(AnimationName.JUMP, true);
-        playerState = PlayerState.JUMP;
+        playerBody.AddForce(new Vector2(200 * direction, 600), ForceMode2D.Force);
         yield return new WaitForSeconds(animatorController.GetCurrentAnimatorStateInfo(0).length - 0.1f);
         animatorController.SetBool(AnimationName.JUMP, false);
+        ChangePlayerState(previousState, canMove, direction);
         canJump = true;
     }
     
     IEnumerator Attack()
     {
         canAtack = false;
+        PlayerState previousState = playerState;
+        ChangePlayerState(PlayerState.ATTACK, canMove, direction);
         animatorController.SetBool(AnimationName.ATTACK, true);
-        playerState = PlayerState.ATTACK;
         yield return new WaitForSeconds(animatorController.GetCurrentAnimatorStateInfo(0).length - .1f);
         animatorController.SetBool(AnimationName.ATTACK, false);
+        ChangePlayerState(previousState, canMove, direction);
         canAtack = true;
     }
 
@@ -134,5 +174,18 @@ public class PlayerController : MonoBehaviour
         animatorController.SetBool(AnimationName.RUN, false);
         animatorController.SetBool(AnimationName.IDLE, false);
     }
-    
+
+
+    public void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Enemy"))
+        {
+            LevelOverController.Instance.GoToThisLevel(1);
+        }
+        else if(collision.CompareTag("Finish"))
+        {
+            LevelOverController.Instance.GoToThisLevel(0);
+        }
+    }
+
 }

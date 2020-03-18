@@ -152,3 +152,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 009d7a206ee9d2740823f8f52fc9cc82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animatorController: {fileID: 0}
+  playerState: 0
+  WalkSpeed: 2
+  RunSpeed: 6

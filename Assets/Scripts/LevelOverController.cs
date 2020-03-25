@@ -19,11 +19,28 @@ public class LevelOverController : MonoBehaviour
     {
         SceneManager.LoadScene(sceneIndex);
     }
+    
+    public void RestartCurrentLevel()
+    {
+        GoToThisLevel(SceneManager.GetActiveScene().buildIndex);
+    }
 
     public void CloseApplication()
     {
         Application.Quit();
     }
 
+    public void ProcessLevelSelection()
+    {
+        PlayerPrefs.SetInt("levelReached", SceneManager.GetActiveScene().buildIndex + 1);
+        GoToThisLevel(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+
+    public void ResatPlayerData()
+    {
+        PlayerPrefs.DeleteAll();
+        GoToThisLevel(0);
+    }
 
 }

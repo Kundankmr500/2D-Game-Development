@@ -5,12 +5,15 @@ using TMPro;
 
 public class LevelHandler : MonoBehaviour
 {
-
+    public static int scoreValue;
     public static LevelHandler Instance;
     public TextMeshProUGUI ScoreText;
     public List<GameObject> PlayerLifes;
+    public GameObject LevelCompleteOBj;
+    public GameObject Player;
+    public GameObject LevelObjects;
+    
 
-    private int scoreValue;
 
     // Start is called before the first frame update
     void Awake()
@@ -26,7 +29,8 @@ public class LevelHandler : MonoBehaviour
 
     void InitDefaultValue()
     {
-        ShowScore(0);
+        if(scoreValue == 0)
+            ShowScore(0);
     }
 
 
@@ -59,7 +63,7 @@ public class LevelHandler : MonoBehaviour
         }
         else
         {
-            LevelOverController.Instance.GoToThisLevel(2);
+            LevelOverController.Instance.GoToThisLevel(5);
         }
 
     }
@@ -67,22 +71,30 @@ public class LevelHandler : MonoBehaviour
 
     public void CheckCollidedObject(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.GetComponent<Enamy>())
         {
             ProcessPlayerLife();
         }
-        else if (collision.CompareTag("Finish"))
+        else if (collision.GetComponent<LevelCompleteGate>())
         {
-            LevelOverController.Instance.GoToThisLevel(0);
+            ShowLevelComplete();
         }
-        else if (collision.CompareTag("Coin"))
+        else if (collision.GetComponent<Coin>())
         {
             ProcessCoin(collision.gameObject);
         }
-        else if (collision.CompareTag("Destroyer"))
+        else if (collision.GetComponent<Destroyer>())
         {
-            LevelOverController.Instance.GoToThisLevel(2);
+            LevelOverController.Instance.GoToThisLevel(5);
         }
+    }
+    
+    public void ShowLevelComplete()
+    {
+        LevelCompleteOBj.SetActive(true);
+        Player.SetActive(false);
+        LevelObjects.SetActive(false);
+        
     }
 
 

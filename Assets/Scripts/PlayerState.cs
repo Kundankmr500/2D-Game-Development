@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿
 
 public enum PlayerState
 {
@@ -9,6 +7,16 @@ public enum PlayerState
     RUN,
     ATTACK,
     JUMP
+}
+
+public enum SceneNames
+{
+    LobbyScene,
+    Scene_1,
+    Scene_2,
+    Scene_3,
+    Scene_4,
+    GameOverScene
 }
 
 

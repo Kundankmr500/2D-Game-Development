@@ -18,13 +18,14 @@ public class LevelSelector : MonoBehaviour
     {
         if (Instance == null)
             Instance = this;
+        
     }
 
 
     public void InitAllLevel()
     {
         int levelReached = PlayerPrefs.GetInt("levelReached", 1);
-        Debug.Log("levelReached "+levelReached);
+
         for (int i = 0; i < AllLevelButtons.Count; i++)
         {
             if (i + 1 > levelReached)

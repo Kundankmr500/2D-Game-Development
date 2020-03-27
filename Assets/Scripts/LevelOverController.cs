@@ -1,17 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class LevelOverController : MonoBehaviour
 {
-    public static LevelOverController Instance;
-
-    // Start is called before the first frame update
-    void Awake()
+    public static LevelOverController _instance;
+    public static LevelOverController Instance
     {
-        if(Instance == null)
-            Instance = this;    
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = GameObject.FindObjectOfType<LevelOverController>();
+
+                if (_instance == null)
+                {
+                    GameObject container = new GameObject("LevelOverController");
+                    _instance = container.AddComponent<LevelOverController>();
+                }
+            }
+            return _instance;
+        }
     }
 
 
@@ -19,19 +28,29 @@ public class LevelOverController : MonoBehaviour
     {
         SceneManager.LoadScene(sceneIndex);
     }
-    
+
+
+    public void LevelButtonclick(int sceneIndex)
+    {
+        AudioManager.Instance.PlayButtonClick();
+        GoToThisLevel(sceneIndex);
+    }
+
     public void RestartCurrentLevel()
     {
+        AudioManager.Instance.PlayButtonClick();
         GoToThisLevel(SceneManager.GetActiveScene().buildIndex);
     }
 
     public void CloseApplication()
     {
+        AudioManager.Instance.PlayButtonClick();
         Application.Quit();
     }
 
     public void ProcessLevelSelection()
     {
+        AudioManager.Instance.PlayButtonClick();
         PlayerPrefs.SetInt("levelReached", SceneManager.GetActiveScene().buildIndex + 1);
         GoToThisLevel(SceneManager.GetActiveScene().buildIndex + 1);
     }
@@ -39,6 +58,7 @@ public class LevelOverController : MonoBehaviour
 
     public void ResatPlayerData()
     {
+        AudioManager.Instance.PlayButtonClick();
         PlayerPrefs.DeleteAll();
         GoToThisLevel(0);
     }

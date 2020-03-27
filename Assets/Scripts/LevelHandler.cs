@@ -12,6 +12,7 @@ public class LevelHandler : MonoBehaviour
     public GameObject LevelCompleteOBj;
     public GameObject Player;
     public GameObject LevelObjects;
+
     
 
 
@@ -49,6 +50,7 @@ public class LevelHandler : MonoBehaviour
 
     public void ProcessCoin(GameObject coin)
     {
+        AudioManager.Instance.PlayCoinClip();
         coin.SetActive(false);
         ShowScore(10);
     }
@@ -63,7 +65,7 @@ public class LevelHandler : MonoBehaviour
         }
         else
         {
-            LevelOverController.Instance.GoToThisLevel(5);
+            LevelOverController.Instance.GoToThisLevel((int)SceneNames.GameOverScene);
         }
 
     }
@@ -85,7 +87,7 @@ public class LevelHandler : MonoBehaviour
         }
         else if (collision.GetComponent<Destroyer>())
         {
-            LevelOverController.Instance.GoToThisLevel(5);
+            LevelOverController.Instance.GoToThisLevel((int)SceneNames.GameOverScene);
         }
     }
     

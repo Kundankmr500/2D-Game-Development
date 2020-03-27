@@ -148,6 +148,7 @@ public class PlayerController : MonoBehaviour
     IEnumerator Jump()
     {
         canJump = false;
+        AudioManager.Instance.PlayPlayerJumpSound();
         previousState = playerState;
         ChangePlayerState(PlayerState.JUMP, canMove, direction);
         animatorController.SetBool(AnimationName.JUMP, true);

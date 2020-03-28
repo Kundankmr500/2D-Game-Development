@@ -17,17 +17,23 @@ public class PlayerController : MonoBehaviour
     private bool canJump = true;
     private bool canAtack = true;
     private bool canMove;
+    Coroutine JumpInstance;
+    Coroutine AttackInstance;
     PlayerState previousState;
 
 
     void Awake()
+    {
+        SetDefaultState();
+    }
+
+    private void SetDefaultState()
     {
         animatorController = GetComponent<Animator>();
         playerBody = GetComponent<Rigidbody2D>();
         playerScale = transform.localScale;
         InitPlayerState(PlayerState.IDLE);
     }
-
 
     void InitPlayerState(PlayerState initialState)
     {
@@ -91,63 +97,93 @@ public class PlayerController : MonoBehaviour
 
     void HandlePlayerAnimation()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow) && playerState != PlayerState.RUN)
+        if (WalkRight())
         {
             ClearBasicAnimations();
-            SetPlayerProperties(AnimationName.WALK,1);
-            ChangePlayerState(PlayerState.WALK,true,1);
+            SetPlayerProperties(AnimationName.WALK, 1);
+            ChangePlayerState(PlayerState.WALK, true, 1);
             previousState = PlayerState.WALK;
         }
-        else if (Input.GetKeyDown(KeyCode.D) && playerState != PlayerState.WALK)
+        else if (RunRight())
         {
             ClearBasicAnimations();
-            SetPlayerProperties(AnimationName.RUN,1);
-            ChangePlayerState(PlayerState.RUN,true,1);
-            previousState = PlayerState.RUN;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && playerState != PlayerState.RUN)
-        {
-            ClearBasicAnimations();
-            SetPlayerProperties(AnimationName.WALK,-1);
-            ChangePlayerState(PlayerState.WALK,true,-1);
-            previousState = PlayerState.WALK;
-        }  
-        else if (Input.GetKeyDown(KeyCode.A) && playerState != PlayerState.WALK)
-        {
-            ClearBasicAnimations(); 
-            SetPlayerProperties(AnimationName.RUN,-1);
-            ChangePlayerState(PlayerState.RUN,true,-1);
+            SetPlayerProperties(AnimationName.RUN, 1);
+            ChangePlayerState(PlayerState.RUN, true, 1);
             previousState = PlayerState.RUN;
         }
 
-        if (Input.GetKeyUp(KeyCode.RightArrow) && playerState != PlayerState.RUN || 
-            Input.GetKeyUp(KeyCode.LeftArrow) && playerState != PlayerState.RUN ||
-            Input.GetKeyUp(KeyCode.A) && playerState != PlayerState.WALK || 
-            Input.GetKeyUp(KeyCode.D) && playerState != PlayerState.WALK)
+        if (WalkLeft())
+        {
+            ClearBasicAnimations();
+            SetPlayerProperties(AnimationName.WALK, -1);
+            ChangePlayerState(PlayerState.WALK, true, -1);
+            previousState = PlayerState.WALK;
+        }
+        else if (RunLeft())
+        {
+            ClearBasicAnimations();
+            SetPlayerProperties(AnimationName.RUN, -1);
+            ChangePlayerState(PlayerState.RUN, true, -1);
+            previousState = PlayerState.RUN;
+        }
+
+        if (NeedsToResatAnimation())
         {
             ClearBasicAnimations();
             animatorController.SetBool(AnimationName.IDLE, true);
-            ChangePlayerState(PlayerState.IDLE,false);
+            ChangePlayerState(PlayerState.IDLE, false);
         }
-        
-        if (Input.GetKeyDown(KeyCode.Space) && canJump)
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            StartCoroutine(Jump());
+            if(JumpInstance == null)
+            {
+                JumpInstance = StartCoroutine(Jump());
+            }
         }
-        
-        if (Input.GetKeyDown(KeyCode.LeftShift) && canAtack)
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            StartCoroutine(Attack());
+            if (AttackInstance == null)
+            {
+                AttackInstance = StartCoroutine(Attack());
+            }
+            
         }
 
         transform.localScale = playerScale;
     }
 
+    private bool RunLeft()
+    {
+        return Input.GetKeyDown(KeyCode.A) && playerState != PlayerState.WALK;
+    }
+
+    private bool WalkLeft()
+    {
+        return Input.GetKeyDown(KeyCode.LeftArrow) && playerState != PlayerState.RUN;
+    }
+
+    private bool RunRight()
+    {
+        return Input.GetKeyDown(KeyCode.D) && playerState != PlayerState.WALK;
+    }
+
+    private bool WalkRight()
+    {
+        return Input.GetKeyDown(KeyCode.RightArrow) && playerState != PlayerState.RUN;
+    }
+
+    private bool NeedsToResatAnimation()
+    {
+        return Input.GetKeyUp(KeyCode.RightArrow) && playerState != PlayerState.RUN ||
+               Input.GetKeyUp(KeyCode.LeftArrow) && playerState != PlayerState.RUN ||
+               Input.GetKeyUp(KeyCode.A) && playerState != PlayerState.WALK ||
+               Input.GetKeyUp(KeyCode.D) && playerState != PlayerState.WALK;
+    }
 
     IEnumerator Jump()
     {
-        canJump = false;
         AudioManager.Instance.PlayPlayerJumpSound();
         previousState = playerState;
         ChangePlayerState(PlayerState.JUMP, canMove, direction);
@@ -156,19 +192,39 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(animatorController.GetCurrentAnimatorStateInfo(0).length - 0.1f);
         animatorController.SetBool(AnimationName.JUMP, false);
         ChangePlayerState(previousState, canMove, direction);
-        canJump = true;
+        if (JumpInstance != null)
+        {
+            StopCoroutine(JumpInstance);
+            JumpInstance = null;
+        }
     }
-    
+
+
+    public void DestroyJumpInstance()
+    {
+
+    }
+
+
+    public void DestroyAttackInstance()
+    {
+
+    }
+
+
     IEnumerator Attack()
     {
-        canAtack = false;
         previousState = playerState;
         ChangePlayerState(PlayerState.ATTACK, canMove, direction);
         animatorController.SetBool(AnimationName.ATTACK, true);
         yield return new WaitForSeconds(animatorController.GetCurrentAnimatorStateInfo(0).length - .1f);
         animatorController.SetBool(AnimationName.ATTACK, false);
         ChangePlayerState(previousState, canMove, direction);
-        canAtack = true;
+        if (AttackInstance != null)
+        {
+            StopCoroutine(AttackInstance);
+            AttackInstance = null;
+        }
     }
 
     void SetPlayerProperties(string animationName, int direction)

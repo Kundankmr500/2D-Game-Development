@@ -31,7 +31,7 @@ public class LevelSelector : MonoBehaviour
             if (i + 1 > levelReached)
             {
                 AllLevelButtons[i].interactable = false;
-                AllLevelButtons[i].transform.GetChild(1).gameObject.SetActive(true);
+                AllLevelButtons[i].GetComponent<LevelButton>().LockThisButton();
             }
             
         }

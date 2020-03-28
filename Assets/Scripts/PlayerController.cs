@@ -14,8 +14,6 @@ public class PlayerController : MonoBehaviour
     private Rigidbody2D playerBody;
     private Vector3 playerScale;
     private int direction;
-    private bool canJump = true;
-    private bool canAtack = true;
     private bool canMove;
     Coroutine JumpInstance;
     Coroutine AttackInstance;

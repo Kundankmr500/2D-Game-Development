@@ -182,6 +182,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Jump()
     {
+        VFXManager.Instance.PlayJumpVFX();
         AudioManager.Instance.PlayPlayerJumpSound();
         previousState = playerState;
         ChangePlayerState(PlayerState.JUMP, canMove, direction);
@@ -212,6 +213,7 @@ public class PlayerController : MonoBehaviour
 
     IEnumerator Attack()
     {
+        AudioManager.Instance.PlayAttackSound();
         previousState = playerState;
         ChangePlayerState(PlayerState.ATTACK, canMove, direction);
         animatorController.SetBool(AnimationName.ATTACK, true);

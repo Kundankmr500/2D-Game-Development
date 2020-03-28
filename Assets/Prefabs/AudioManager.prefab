@@ -47,6 +47,7 @@ MonoBehaviour:
   CoinSound: {fileID: 8300000, guid: fac6f18f6de3efe4b947ef85f9157ee0, type: 3}
   PlayerJumpSound: {fileID: 8300000, guid: 54a1fef990b517542a4af44e377f9d80, type: 3}
   ButtonClick: {fileID: 8300000, guid: 577c8c62dcf46814fb41ee17bd842d2c, type: 3}
+  AttackSound: {fileID: 8300000, guid: 794ba4ea53ad9c34ba72e97fa76b793f, type: 3}
 --- !u!82 &9001134768605801391
 AudioSource:
   m_ObjectHideFlags: 0

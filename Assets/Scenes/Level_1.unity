@@ -429,7 +429,7 @@ GameObject:
   - component: {fileID: 162227509}
   - component: {fileID: 162227508}
   m_Layer: 0
-  m_Name: BGSound (4)
+  m_Name: BGSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15340,11 +15340,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
-    - target: {fileID: 1065721373323705606, guid: 41575c0370f85d7469ef5e2f33cab46b,
-        type: 3}
-      propertyPath: m_TagString
-      value: Player
-      objectReference: {fileID: 0}
     - target: {fileID: 1064885369670837856, guid: 41575c0370f85d7469ef5e2f33cab46b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15399,21 +15394,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 881179553715102228, guid: 41575c0370f85d7469ef5e2f33cab46b,
-        type: 3}
-      propertyPath: m_SortingOrder
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1044258004270130740, guid: 41575c0370f85d7469ef5e2f33cab46b,
-        type: 3}
-      propertyPath: m_LinearDrag
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1044258004270130740, guid: 41575c0370f85d7469ef5e2f33cab46b,
-        type: 3}
-      propertyPath: m_Mass
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 41575c0370f85d7469ef5e2f33cab46b, type: 3}

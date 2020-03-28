@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip CoinSound;
     public AudioClip PlayerJumpSound;
     public AudioClip ButtonClick;
+    public AudioClip AttackSound;
 
     private AudioSource audioSource;
 
@@ -51,6 +52,11 @@ public class AudioManager : MonoBehaviour
     public void PlayButtonClick()
     {
         audioSource.PlayOneShot(ButtonClick);
+    }
+
+    public void PlayAttackSound()
+    {
+        audioSource.PlayOneShot(AttackSound);
     }
 
 
